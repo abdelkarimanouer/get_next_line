@@ -22,6 +22,51 @@ static int	add_str(char *fullstr, unsigned int index, char const *s)
 	return (index);
 }
 
+char    *ft_strdup(const char *s)
+{
+        int             i;
+        char    *copy;
+        size_t  len;
+
+        if (!s)
+                return (NULL);
+        i = 0;
+        len = ft_strlen(s);
+        copy = malloc(len + 1);
+        if (copy == NULL)
+                return (NULL);
+        while (s[i])
+        {
+                copy[i] = s[i];
+                i++;
+        }
+        copy[i] = '\0';
+        return (copy);
+}
+
+char    *ft_substr(char const *s, unsigned int start, size_t len)
+{
+        char    *sstr;
+        size_t  i;
+        size_t  lenstr;
+
+        if (!s)
+                return (NULL);
+        lenstr = ft_strlen(s);
+        if (start >= lenstr)
+                return (ft_strdup(""));
+        if (len > lenstr - start)
+                len = lenstr - start;
+        sstr = malloc(len + 1);
+        if (!sstr)
+                return (NULL);
+        i = 0;
+        while (i < len)
+                sstr[i++] = s[start++];
+        sstr[i] = '\0';
+        return (sstr);
+}
+
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	int		index;
