@@ -3,6 +3,10 @@
 
 # include <stdlib.h>
 
+#ifndef BUFFER_SIZE
+# define BUFFER_SIZE 0
+#endif
+
 size_t	ft_strlen(const char *s);
 char	*ft_strjoin(char const *s1, char const *s2);
 
