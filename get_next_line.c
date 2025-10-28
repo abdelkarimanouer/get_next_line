@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 15:23:06 by aanouer           #+#    #+#             */
-/*   Updated: 2025/10/28 15:25:21 by aanouer          ###   ########.fr       */
+/*   Updated: 2025/10/28 19:43:06 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,15 @@ static char	*free_storage(char *storage, char *line)
 	return (NULL);
 }
 
+static char	*return_line(char *line, char *storage, char *tmp, ssize_t endline)
+{
+	line = ft_substr(storage, 0, endline);
+	tmp = storage;
+	storage = ft_strdup(storage + endline + 1);
+	free(tmp);
+	return (line);
+}
+
 static char	*get_line(char *storage, char *line, int fd, char *data)
 {
 	ssize_t	endline;
@@ -56,11 +65,7 @@ static char	*get_line(char *storage, char *line, int fd, char *data)
 		free(tmp);
 		endline = get_index_newline(storage);
 		if (endline != -1)
-		{
-			line = ft_substr(storage, 0, endline);
-			storage = ft_strdup(storage + endline + 1);
-			return (line);
-		}
+			return (return_line(line, storage, tmp, endline));
 		if (size == 0)
 			break ;
 	}
