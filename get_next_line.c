@@ -24,11 +24,12 @@ char	*get_next_line(int fd)
 
 	if (!storage)
 		storage = ft_strdup("");
+	size = 1;
 	while (size > 0)
 	{
 		size = read(fd, data, BUFFER_SIZE);
-		storage = ft_strjoin(storage, data);
 		data[size] = '\0';
+		storage = ft_strjoin(storage, data);
 		endline = get_index_newline(storage);
 		if (endline != -1)
 		{
