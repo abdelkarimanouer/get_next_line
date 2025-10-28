@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/28 15:23:20 by aanouer           #+#    #+#             */
+/*   Updated: 2025/10/28 15:23:28 by aanouer          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
 # include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
+# include <fcntl.h>
+# include <unistd.h>
 
 #ifndef BUFFER_SIZE
 # define BUFFER_SIZE 0

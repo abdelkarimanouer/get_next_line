@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/28 15:23:06 by aanouer           #+#    #+#             */
+/*   Updated: 2025/10/28 15:25:21 by aanouer          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
-static ssize_t get_index_newline(char *data)
+static ssize_t	get_index_newline(char *data)
 {
-	ssize_t i;
+	ssize_t	i;
 
 	i = 0;
 	while (data[i])
@@ -14,7 +26,7 @@ static ssize_t get_index_newline(char *data)
 	return (-1);
 }
 
-static char *free_storage(char *storage, char *line)
+static char	*free_storage(char *storage, char *line)
 {
 	if (storage && storage[0] != '\0')
 	{
@@ -50,21 +62,21 @@ static char	*get_line(char *storage, char *line, int fd, char *data)
 			return (line);
 		}
 		if (size == 0)
-			break;
+			break ;
 	}
 	return (free_storage(storage, line));
 }
 
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
-	char data[1024];
-	char *line;
-	static char *storage;
+	char		data[1024];
+	char		*line;
+	static char	*storage;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	line = NULL;
 	if (!storage)
 		storage = ft_strdup("");
-	return get_line(storage, line, fd, data);
+	return (get_line(storage, line, fd, data));
 }
