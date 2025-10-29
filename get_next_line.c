@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 15:23:06 by aanouer           #+#    #+#             */
-/*   Updated: 2025/10/29 16:13:12 by aanouer          ###   ########.fr       */
+/*   Updated: 2025/10/29 16:28:57 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,7 @@ static char	*return_line(char **container)
 	*container = ft_strdup(*container + len + ((*container)[len] == '\n'));
 	free(tmp);
 	if (!line || !*container)
-	{
-		free(line);
-		return (NULL);
-	}
+		return (free(line), NULL);
 	return (line);
 }
 
