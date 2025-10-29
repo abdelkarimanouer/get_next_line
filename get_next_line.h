@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 15:23:20 by aanouer           #+#    #+#             */
-/*   Updated: 2025/10/28 15:43:20 by aanouer          ###   ########.fr       */
+/*   Updated: 2025/10/29 14:16:47 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define GET_NEXT_LINE_H
 
 # include <stdlib.h>
-# include <fcntl.h>
 # include <unistd.h>
 
 # ifndef BUFFER_SIZE
