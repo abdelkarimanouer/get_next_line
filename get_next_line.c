@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 15:23:06 by aanouer           #+#    #+#             */
-/*   Updated: 2025/10/28 19:43:06 by aanouer          ###   ########.fr       */
+/*   Updated: 2025/10/29 13:33:02 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,33 +26,35 @@ static ssize_t	get_index_newline(char *data)
 	return (-1);
 }
 
-static char	*free_storage(char *storage, char *line)
+static char	*free_storage(char **storage, char *line)
 {
-	if (storage && storage[0] != '\0')
+	if (*storage && (*storage)[0] != '\0')
 	{
-		line = ft_strdup(storage);
-		free(storage);
-		storage = NULL;
+		line = ft_strdup(*storage);
+		free(*storage);
+		*storage = NULL;
 		return (line);
 	}
 	return (NULL);
 }
 
-static char	*return_line(char *line, char *storage, char *tmp, ssize_t endline)
+static char	*return_line(char *line, char **storage, char *tmp, ssize_t endline)
 {
-	line = ft_substr(storage, 0, endline);
-	tmp = storage;
-	storage = ft_strdup(storage + endline + 1);
+	line = ft_substr(*storage, 0, endline + 1);
+	tmp = *storage;
+	*storage = ft_strdup(*storage + endline + 1);
 	free(tmp);
 	return (line);
 }
 
-static char	*get_line(char *storage, char *line, int fd, char *data)
+static char	*get_line(char **storage, char *line, int fd, char *data)
 {
 	ssize_t	endline;
 	ssize_t	size;
 	char	*tmp;
 
+	if (*storage == NULL)
+		return (NULL);
 	size = 1;
 	while (size > 0)
 	{
@@ -60,10 +62,10 @@ static char	*get_line(char *storage, char *line, int fd, char *data)
 		if (size < 0)
 			return (NULL);
 		data[size] = '\0';
-		tmp = storage;
-		storage = ft_strjoin(storage, data);
+		tmp = *storage;
+		*storage = ft_strjoin(*storage, data);
 		free(tmp);
-		endline = get_index_newline(storage);
+		endline = get_index_newline(*storage);
 		if (endline != -1)
 			return (return_line(line, storage, tmp, endline));
 		if (size == 0)
@@ -83,5 +85,5 @@ char	*get_next_line(int fd)
 	line = NULL;
 	if (!storage)
 		storage = ft_strdup("");
-	return (get_line(storage, line, fd, data));
+	return (get_line(&storage, line, fd, data));
 }
