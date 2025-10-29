@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 15:23:06 by aanouer           #+#    #+#             */
-/*   Updated: 2025/10/29 13:52:23 by aanouer          ###   ########.fr       */
+/*   Updated: 2025/10/29 15:12:52 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,12 @@ static char	*return_line(char *line, char **storage, char *tmp, ssize_t endline)
 	return (line);
 }
 
-static char	*get_line(char **storage, char *line, int fd, char *data)
+static char	*get_line(char **storage, char *line, int fd)
 {
 	ssize_t	endline;
 	ssize_t	size;
 	char	*tmp;
+	char	data[BUFFER_SIZE + 1];
 
 	if (!*storage)
 		return (NULL);
@@ -70,6 +71,11 @@ static char	*get_line(char **storage, char *line, int fd, char *data)
 		data[size] = '\0';
 		tmp = *storage;
 		*storage = ft_strjoin(*storage, data);
+		if (!*storage)
+		{
+			free(tmp);
+			return (NULL);
+		}
 		free(tmp);
 		endline = get_index_newline(*storage);
 		if (endline != -1)
@@ -82,7 +88,6 @@ static char	*get_line(char **storage, char *line, int fd, char *data)
 
 char	*get_next_line(int fd)
 {
-	char		data[1024];
 	char		*line;
 	static char	*storage;
 
@@ -91,7 +96,7 @@ char	*get_next_line(int fd)
 	line = NULL;
 	if (!storage)
 		storage = ft_strdup("");
-	line = get_line(&storage, line, fd, data);
+	line = get_line(&storage, line, fd);
 	if (!line && storage)
 	{
 		free(storage);
