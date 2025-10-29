@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 15:23:06 by aanouer           #+#    #+#             */
-/*   Updated: 2025/10/29 15:44:31 by aanouer          ###   ########.fr       */
+/*   Updated: 2025/10/29 16:13:12 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,30 @@ static char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-static char	*read_line(int fd, char **container)
+static char	*return_line(char **container)
+{
+	char	*line;
+	char	*tmp;
+	size_t	len;
+
+	if (!*container || !**container)
+		return (NULL);
+	len = 0;
+	while ((*container)[len] && (*container)[len] != '\n')
+		len++;
+	line = ft_substr(*container, 0, len + ((*container)[len] == '\n'));
+	tmp = *container;
+	*container = ft_strdup(*container + len + ((*container)[len] == '\n'));
+	free(tmp);
+	if (!line || !*container)
+	{
+		free(line);
+		return (NULL);
+	}
+	return (line);
+}
+
+static char	*read_data(int fd, char **container)
 {
 	char	*data_read;
 	char	*tmp;
@@ -58,26 +81,6 @@ static char	*read_line(int fd, char **container)
 	return (free(data_read), *container);
 }
 
-static char	*extract_line(char **container)
-{
-	char	*line;
-	char	*tmp;
-	size_t	len;
-
-	if (!*container || !**container)
-		return (NULL);
-	len = 0;
-	while ((*container)[len] && (*container)[len] != '\n')
-		len++;
-	line = ft_substr(*container, 0, len + ((*container)[len] == '\n'));
-	tmp = *container;
-	*container = ft_strdup(*container + len + ((*container)[len] == '\n'));
-	free(tmp);
-	if (!line || !*container)
-		return (free(line), NULL);
-	return (line);
-}
-
 char	*get_next_line(int fd)
 {
 	static char	*container;
@@ -87,9 +90,9 @@ char	*get_next_line(int fd)
 		return (NULL);
 	if (!container)
 		container = ft_strdup("");
-	if (!container || !read_line(fd, &container))
+	if (!container || !read_data(fd, &container))
 		return (free(container), container = NULL, NULL);
-	line = extract_line(&container);
+	line = return_line(&container);
 	if (!line)
 		return (free(container), container = NULL, NULL);
 	return (line);
