@@ -6,101 +6,91 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 15:23:06 by aanouer           #+#    #+#             */
-/*   Updated: 2025/10/29 15:12:52 by aanouer          ###   ########.fr       */
+/*   Updated: 2025/10/29 15:44:31 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static ssize_t	get_index_newline(char *data)
+static char	*ft_strchr(const char *s, int c)
 {
-	ssize_t	i;
+	int		i;
+	char	tmpc;
 
+	if (!s)
+		return (NULL);
 	i = 0;
-	while (data[i])
+	tmpc = (char)c;
+	while (s[i])
 	{
-		if (data[i] == '\n')
-			return (i);
+		if (s[i] == tmpc)
+			return ((char *)&s[i]);
 		i++;
 	}
-	return (-1);
-}
-
-static char	*free_storage(ssize_t size, char **storage, char *line)
-{
-	if (size < 0)
-	{
-		free(*storage);
-		*storage = NULL;
-		return (NULL);
-	}
-	if (*storage && (*storage)[0] != '\0')
-	{
-		line = ft_strdup(*storage);
-		free(*storage);
-		*storage = NULL;
-		return (line);
-	}
+	if (tmpc == s[i])
+		return ((char *)&s[i]);
 	return (NULL);
 }
 
-static char	*return_line(char *line, char **storage, char *tmp, ssize_t endline)
+static char	*read_line(int fd, char **container)
 {
-	line = ft_substr(*storage, 0, endline + 1);
-	tmp = *storage;
-	*storage = ft_strdup(*storage + endline + 1);
-	free(tmp);
-	return (line);
+	char	*data_read;
+	char	*tmp;
+	ssize_t	bytes_read;
+
+	data_read = malloc((size_t)BUFFER_SIZE + 1);
+	if (!data_read)
+		return (free(*container), *container = NULL, NULL);
+	while (!ft_strchr(*container, '\n'))
+	{
+		bytes_read = read(fd, data_read, BUFFER_SIZE);
+		if (bytes_read == -1)
+			return (free(data_read), free(*container), *container = NULL, NULL);
+		if (bytes_read == 0)
+			break ;
+		data_read[bytes_read] = '\0';
+		tmp = *container;
+		*container = ft_strjoin(*container, data_read);
+		free(tmp);
+		if (!*container)
+			return (free(data_read), NULL);
+	}
+	return (free(data_read), *container);
 }
 
-static char	*get_line(char **storage, char *line, int fd)
+static char	*extract_line(char **container)
 {
-	ssize_t	endline;
-	ssize_t	size;
+	char	*line;
 	char	*tmp;
-	char	data[BUFFER_SIZE + 1];
+	size_t	len;
 
-	if (!*storage)
+	if (!*container || !**container)
 		return (NULL);
-	size = 1;
-	while (size > 0)
-	{
-		size = read(fd, data, BUFFER_SIZE);
-		if (size < 0)
-			free_storage(size, storage, line);
-		data[size] = '\0';
-		tmp = *storage;
-		*storage = ft_strjoin(*storage, data);
-		if (!*storage)
-		{
-			free(tmp);
-			return (NULL);
-		}
-		free(tmp);
-		endline = get_index_newline(*storage);
-		if (endline != -1)
-			return (return_line(line, storage, tmp, endline));
-		if (size == 0)
-			break ;
-	}
-	return (free_storage(size, storage, line));
+	len = 0;
+	while ((*container)[len] && (*container)[len] != '\n')
+		len++;
+	line = ft_substr(*container, 0, len + ((*container)[len] == '\n'));
+	tmp = *container;
+	*container = ft_strdup(*container + len + ((*container)[len] == '\n'));
+	free(tmp);
+	if (!line || !*container)
+		return (free(line), NULL);
+	return (line);
 }
 
 char	*get_next_line(int fd)
 {
+	static char	*container;
 	char		*line;
-	static char	*storage;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	line = NULL;
-	if (!storage)
-		storage = ft_strdup("");
-	line = get_line(&storage, line, fd);
-	if (!line && storage)
-	{
-		free(storage);
-		storage = NULL;
-	}
+	if (!container)
+		container = ft_strdup("");
+	if (!container || !read_line(fd, &container))
+		return (free(container), container = NULL, NULL);
+	line = extract_line(&container);
+	if (!line)
+		return (free(container), container = NULL, NULL);
 	return (line);
 }
