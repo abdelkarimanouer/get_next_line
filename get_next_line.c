@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 15:23:06 by aanouer           #+#    #+#             */
-/*   Updated: 2025/10/29 16:28:57 by aanouer          ###   ########.fr       */
+/*   Updated: 2025/10/29 16:49:07 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,16 @@ static char	*return_line(char **container)
 {
 	char	*line;
 	char	*tmp;
-	size_t	len;
+	size_t	i;
 
-	if (!*container || !**container)
+	if (*container == NULL || (*container)[0] == '\0')
 		return (NULL);
-	len = 0;
-	while ((*container)[len] && (*container)[len] != '\n')
-		len++;
-	line = ft_substr(*container, 0, len + ((*container)[len] == '\n'));
+	i = 0;
+	while ((*container)[i] != '\0' && (*container)[i] != '\n')
+		i++;
+	line = ft_substr(*container, 0, i + ((*container)[i] == '\n'));
 	tmp = *container;
-	*container = ft_strdup(*container + len + ((*container)[len] == '\n'));
+	*container = ft_strdup(*container + i + ((*container)[i] == '\n'));
 	free(tmp);
 	if (!line || !*container)
 		return (free(line), NULL);
