@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 17:41:22 by aanouer           #+#    #+#             */
-/*   Updated: 2025/10/30 18:34:17 by aanouer          ###   ########.fr       */
+/*   Updated: 2025/10/30 19:57:53 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,10 @@ static char	*read_data(int fd, char **container)
 
 char	*get_next_line(int fd)
 {
-	static char	*container[1024];
+	static char	*container[OPEN_MAX];
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd >= OPEN_MAX || BUFFER_SIZE <= 0)
 		return (NULL);
 	if (!container[fd])
 		container[fd] = ft_strdup("");
@@ -93,19 +93,4 @@ char	*get_next_line(int fd)
 	if (!line)
 		return (free(container[fd]), container[fd] = NULL, NULL);
 	return (line);
-}
-
-#include <stdio.h>
-#include <fcntl.h>
-
-int	main(void)
-{
-	int fd1 = open("file.txt", O_RDONLY);
-	int fd2 = open("file2.txt", O_RDONLY);
-	printf("%s\n",get_next_line(fd1));
-	printf("%s\n",get_next_line(fd2));
-	printf("%s\n",get_next_line(fd1));
-	printf("%s\n",get_next_line(fd2));
-
-	return (0);
 }
