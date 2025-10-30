@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 17:41:20 by aanouer           #+#    #+#             */
-/*   Updated: 2025/10/30 18:16:54 by aanouer          ###   ########.fr       */
+/*   Updated: 2025/10/30 18:29:05 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdlib.h>
 # include <unistd.h>
+#include <limits.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
