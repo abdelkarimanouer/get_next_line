@@ -6,31 +6,13 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 15:23:06 by aanouer           #+#    #+#             */
-/*   Updated: 2025/10/30 17:38:10 by aanouer          ###   ########.fr       */
+/*   Updated: 2025/11/05 10:02:26 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*ft_strchr(const char *s, int c)
-{
-	int		i;
-	char	tmpc;
 
-	if (!s)
-		return (NULL);
-	i = 0;
-	tmpc = (char)c;
-	while (s[i])
-	{
-		if (s[i] == tmpc)
-			return ((char *)&s[i]);
-		i++;
-	}
-	if (tmpc == s[i])
-		return ((char *)&s[i]);
-	return (NULL);
-}
 
 static char	*return_line(char **container)
 {
